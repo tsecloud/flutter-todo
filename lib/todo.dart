@@ -34,4 +34,25 @@ class Todo {
     endAt = new DateTime.fromMicrosecondsSinceEpoch(map['end_at']);
     done = map['done'] == 1 ? true : false;
   }
+
+  // 计算剩余时间的百分比
+  double computeLeftTime(){
+
+    if(this.done == true){
+      return 1.0;
+    }
+
+    DateTime now = new DateTime.now();
+
+    //判断是否开始
+    if(now.compareTo(this.startAt) < 0){
+      return 0.0;
+    }
+
+    num totalTime = this.endAt.difference(this.startAt).inMinutes;
+    num useTime = now.difference(this.startAt).inMinutes;
+
+    double left = useTime / totalTime;
+    return left;
+  }
 }

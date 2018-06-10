@@ -68,6 +68,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   Widget getTodoShow(BuildContext context, int index){
+
     return new Padding(
       padding: const EdgeInsets.all(4.0),
       child: new Card(
@@ -96,7 +97,7 @@ class _TodoListState extends State<TodoList> {
                 new Text(_todos[index].startAt.toString().substring(0,19))
               ],
             ),
-        new LinearProgressIndicator(backgroundColor: Colors.red, value: 0.8,),
+        new LinearProgressIndicator(backgroundColor: Colors.red, value: _todos[index].computeLeftTime(),),
         ],
       ),
       ),
