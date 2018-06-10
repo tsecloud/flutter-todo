@@ -38,20 +38,22 @@ class _AddTodoFormState extends State<AddTodoForm> {
       form.save();
       newTodo.startAt = _combineDateAndTime(_fromDate, _fromTime);
       newTodo.endAt = _combineDateAndTime(_toDate, _toTime);
-      // print(newTodo.startAt);
-      // int compareResult = newTodo.startAt.compareTo(newTodo.endAt);
-      // // print(compareResult);
-      // // if(0 == compareResult){
-      // //   showMessage('开始时间不能等于结束时间');
-      // // }
+
+      int compareResult = newTodo.startAt.compareTo(newTodo.endAt);
+
+      if(0 == compareResult){
+        showMessage('开始时间不能等于结束时间');
+      }
 
 
-      // // if(compareResult > 0){
-      // //   showMessage('开始时间不能大于结束时间');
-      // // }
-
-
-      Navigator.of(context).pop(newTodo);
+      if(compareResult > 0){
+        showMessage('开始时间不能晚于结束时间');
+      }
+      
+      if(compareResult < 0){
+        Navigator.of(context).pop(newTodo);
+      }
+      
     }
   }
 

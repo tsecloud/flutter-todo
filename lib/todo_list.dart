@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'todo.dart';
 import 'add_form.dart';
 import 'package:intl/intl.dart';
+import 'todo_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TodoList extends StatefulWidget {
   @override
@@ -11,8 +15,34 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  List<Todo> todos = [];
+  List<Todo> _todos = [];
 
+  TodoProvider todoProvider;
+
+  Directory directory;
+
+  @override
+  void initState(){
+    super.initState();
+
+    init();
+  }
+
+  Future init() async {
+    todoProvider = new TodoProvider();
+
+    directory = await getApplicationDocumentsDirectory();
+
+    String path = join(directory.path, "todos.db");
+
+    await todoProvider.open(path);
+
+    List<Todo> todos = await todoProvider.getTodos();
+
+    setState(() {
+          _todos.addAll(todos);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +56,7 @@ class _TodoListState extends State<TodoList> {
           builder: (BuildContext context){
             return new Container(
               child: ListView.builder(
-                itemCount: todos.length,
+                itemCount: _todos.length,
                 itemBuilder:(BuildContext context, int index){
                   return getTodoShow(context, index);
                 },
@@ -50,7 +80,7 @@ class _TodoListState extends State<TodoList> {
           children: <Widget>[
             new Padding(padding: const EdgeInsets.only(right: 6.0),child: new Icon(Icons.event_note, color: Colors.blue,),),
             new Expanded(
-              child:new Text(todos[index].name, style: new TextStyle(
+              child:new Text(_todos[index].name, style: new TextStyle(
               fontSize: 14.0,
             ),),
             )
@@ -61,9 +91,9 @@ class _TodoListState extends State<TodoList> {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 new Padding(padding: const EdgeInsets.only(right: 6.0), child: new Icon(Icons.details, color: Colors.green,),),
-                new Text(todos[index].startAt.toString().substring(0,19)),
+                new Text(_todos[index].startAt.toString().substring(0,19)),
                 new Padding(padding: const EdgeInsets.only(left: 8.0, right: 6.0),child: new Icon(Icons.stop, color: Colors.red),),
-                new Text(todos[index].startAt.toString().substring(0,19))
+                new Text(_todos[index].startAt.toString().substring(0,19))
               ],
             ),
         new LinearProgressIndicator(backgroundColor: Colors.red, value: 0.8,),
@@ -86,8 +116,9 @@ class _TodoListState extends State<TodoList> {
 
 
     if (newTodo != null){
+      Todo daddTodo = await todoProvider.insertTodo(newTodo);
       setState(() {
-          todos.add(newTodo);
+          _todos.add(daddTodo);
       });
     }
   }
