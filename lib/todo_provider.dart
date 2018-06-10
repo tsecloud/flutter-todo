@@ -48,7 +48,7 @@ class TodoProvider {
   }
 
   Future<List<Todo>> getTodos() async {
-    List<Map> maps = await db.query(tableName);
+    List<Map> maps = await db.query(tableName, orderBy: "created_at",limit: 20);
 
     List<Todo> list = [];
 
@@ -60,7 +60,7 @@ class TodoProvider {
     return list;
   }
 
-  Future<int> updateTodo(Todo todo) async {
+  Future<int>updateTodo(Todo todo) async {
     return await db.update(tableName, todo.toMap(),
         where: "id = ?", whereArgs: [todo.id]);
   }

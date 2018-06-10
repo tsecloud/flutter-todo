@@ -157,6 +157,11 @@ class _TodoListState extends State<TodoList> {
 
 
   Future _updateTodo(BuildContext context, Todo todo, int index) async {
+    if(todo.done){
+      _showDialog(context, '任务已完成，无需变更');
+    }else if(todo.endAt.compareTo(new DateTime.now()) < 0 ){
+      _showDialog(context, '任务已结束，无法变更');      
+    }else{
     Todo newTodo = await Navigator.of(context).push(
       new MaterialPageRoute<Todo>(
         builder: (BuildContext context){
@@ -171,6 +176,7 @@ class _TodoListState extends State<TodoList> {
             _todos[index] = newTodo;
         });
       }
+    }
     }
   }
 
@@ -192,7 +198,7 @@ class _TodoListState extends State<TodoList> {
 
     }else if(isStart <= 0 && isEnd > 0){
        todo.done = true;
-
+        todo.endAt = new DateTime.now();
        int result = await todoProvider.updateTodo(todo);
 
        if(result == 1){
