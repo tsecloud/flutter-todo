@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'todo.dart';
 import 'add_form.dart';
-import 'package:intl/intl.dart';
 import 'todo_provider.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -72,36 +71,25 @@ class _TodoListState extends State<TodoList> {
     return new Padding(
       padding: const EdgeInsets.all(4.0),
       child: new Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
         child: new Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-        new Row(
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(right: 6.0),child: new Icon(Icons.event_note, color: Colors.blue,),),
-            new Expanded(
-              child:new Text(_todos[index].name, style: new TextStyle(
-              fontSize: 14.0,
-            ),),
-            )
+            new LinearProgressIndicator(backgroundColor: Colors.red, value: _todos[index].computeLeftTime(),),
+            new ListTile(
+              leading: getLeading(_todos[index]),
+              title: new Text(_todos[index].name),
+              subtitle: new Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    new Padding(padding: const EdgeInsets.only(right: 6.0), child: new Icon(Icons.details, color: Colors.green,),),
+                    new Text(_todos[index].getDateMd(_todos[index].startAt)),
+                    new Padding(padding: const EdgeInsets.only(right: 6.0), child: new Icon(Icons.details, color: Colors.red,),),
+                    new Text(_todos[index].getDateMd(_todos[index].endAt))
+                  ],
+              ),
+            ),
           ],
         ),
-        new Divider(color: Colors.white, height: 10.0, indent: 0.0,),
-            new Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                new Padding(padding: const EdgeInsets.only(right: 6.0), child: new Icon(Icons.details, color: Colors.green,),),
-                new Text(_todos[index].startAt.toString().substring(0,19)),
-                new Padding(padding: const EdgeInsets.only(left: 8.0, right: 6.0),child: new Icon(Icons.stop, color: Colors.red),),
-                new Text(_todos[index].startAt.toString().substring(0,19))
-              ],
-            ),
-        new LinearProgressIndicator(backgroundColor: Colors.red, value: _todos[index].computeLeftTime(),),
-        ],
-      ),
-      ),
-    )
+      )
     );
   }
 
@@ -122,5 +110,28 @@ class _TodoListState extends State<TodoList> {
           _todos.add(daddTodo);
       });
     }
+  }
+
+  Widget getLeading(Todo todo){
+    if (todo.done == true){
+      return new Icon(Icons.done, color: Colors.green,);
+    }
+
+    int isStart = todo.startAt.compareTo(new DateTime.now());
+
+    int isEnd = todo.endAt.compareTo(new DateTime.now());
+    //未开始
+    if( isStart > 0){
+      return new Icon(Icons.toc,);
+    }
+
+    //进行中
+    if(isStart <= 0 && isEnd > 0){
+      return new Icon(Icons.schedule, color: Colors.blue);
+    }
+
+    //结束未完成
+    return new Icon(Icons.pause, color: Colors.red,);
+
   }
 }

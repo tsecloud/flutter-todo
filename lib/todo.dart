@@ -1,3 +1,6 @@
+import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+
 class Todo {
   Todo();
 
@@ -55,4 +58,12 @@ class Todo {
     double left = useTime / totalTime;
     return left;
   }
+
+  String getDateMd(DateTime datetime){
+    String date = new DateFormat.Md().format(datetime);
+    String time = new DateFormat.Hm().format(datetime);
+
+    return date +" "+ time;
+  }
+
 }
