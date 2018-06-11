@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
-
+import 'todo.dart';
 ///参考文章
 ///https://engineering.classpro.in/flutter-1-navigation-drawer-routes-8b43a201251e
 ///
 const String _AccountName = 'Gru.mo';
 const String _AccountEmail = 'Gru.mo@vodehr.com';
-const String _AccountAbbr = 'Gru';
+
 
 class DrawerPage extends StatelessWidget {
+
+
+  DrawerPage({Key key, this.archiveSearch}):super(key:key);
+
+
+  final ValueChanged<SearchStatus> archiveSearch;
+
+
   //显示用户头部信息
   final userAccountHeader = new UserAccountsDrawerHeader(
     accountName: const Text(_AccountName),
@@ -40,25 +48,30 @@ class DrawerPage extends StatelessWidget {
             onTap: null,
           ),
           new ListTile(
+            leading: new Icon(Icons.menu),
+            title: new Text('全部'),
+            onTap: () => _todoArchive(context,SearchStatus.all),
+          ),
+          new ListTile(
             leading: new Icon(Icons.done),
             title: new Text('已完成'),
-            onTap: null,
+            onTap: () => _todoArchive(context,SearchStatus.done),
           ),
           new ListTile(
             leading: new Icon(Icons.list),
             title: new Text('进行中'),
-            onTap: null,
+            onTap: () => _todoArchive(context,SearchStatus.doing),
           ),
           new ListTile(
             leading: new Icon(Icons.calendar_today),
             title: new Text('未开始'),
-            onTap: null,
+            onTap: () => _todoArchive(context, SearchStatus.wait),
           ),
           new ListTile(
             leading: new Icon(Icons.pause),
             title: new Text('已过期'),
             onTap: () {
-              Navigator.of(context).pop();
+              _todoArchive(context, SearchStatus.pause);
             },
           ),
         ],
@@ -66,7 +79,8 @@ class DrawerPage extends StatelessWidget {
     );
   }
 
-  void _todoArchive(BuildContext context, int status) {
-    Navigator.of(context).pop(status);
+  void _todoArchive(BuildContext context, SearchStatus status) {
+    Navigator.of(context).pop();
+    archiveSearch(status);
   }
 }

@@ -21,9 +21,9 @@ class TodoProvider {
           
           remark text  null,
 
-          start_at text not null,
+          start_at integer not null,
 
-          end_at text not null,
+          end_at integer not null,
 
           done integer not null default 0
         )
@@ -52,9 +52,9 @@ class TodoProvider {
     List<Todo> list = [];
 
     if (maps.length > 0) {
-      for (var item in maps) {
-        list.add(Todo.fromMap(item));
-      }
+      maps.forEach((item){
+          list.add(Todo.fromMap(item));
+      });
     }
     return list;
   }
@@ -66,6 +66,41 @@ class TodoProvider {
 
   Future<int> deleteTodo(int id) async {
     return await db.delete(tableName, where: "id = ?", whereArgs: [id]);
+  }
+
+  Future<List<Todo>> scopeTodos(SearchStatus status) async{
+
+    List<Map> maps;
+
+    num now = DateTime.now().millisecondsSinceEpoch;
+    switch (status) {
+      case SearchStatus.wait:
+        maps = await db.query(tableName, where: "done != 1 and start_at > ?", whereArgs: [now]);
+        break;
+      case SearchStatus.doing:
+        maps = await db.query(tableName, where: "done != 1 and start_at < ? and end_at > ?", whereArgs: [now, now]);
+        break;
+
+      case SearchStatus.done:
+        maps = await db.query(tableName, where: "done = 1 ");
+        break;
+
+      case SearchStatus.pause:
+        maps = await db.query(tableName, where: "done != 1 and end_at < ? ", whereArgs: [now]);
+        break;
+      case SearchStatus.all:
+        maps = await db.query(tableName, orderBy: "start_at", limit: 20);
+        break;
+    }
+    
+    List<Todo> list = [];
+
+    if (maps.length > 0) {
+      maps.forEach((item){
+        list.add(Todo.fromMap(item));
+      });
+    }
+    return list;
   }
 
   Future close() => db.close();

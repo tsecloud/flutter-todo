@@ -56,21 +56,26 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     GlobalKey<ScaffoldState> _listScaffoldKey = GlobalKey<ScaffoldState>();
 
+
+    Future _archiveSearch(SearchStatus status) async{
+        List<Todo> newtodos =  await todoProvider.scopeTodos(status);
+
+        setState(() {
+            _todos = newtodos;          
+        });
+    }
+
     return new Scaffold(
       key: _listScaffoldKey,
       appBar: new AppBar(
-        // leading: new IconButton(
-        //   icon: new Icon(Icons.menu),
-        //   onPressed: null,
-        // ),
         title: new Text('Todo'),
         elevation: 0.8,
       ),
+      drawer: new DrawerPage(archiveSearch:_archiveSearch),
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
         onPressed: () => _addTodo(context),
       ),
-      drawer: new DrawerPage(),
       body: new Builder(
         builder: (BuildContext context) {
           return new Container(
@@ -106,7 +111,7 @@ class _TodoListState extends State<TodoList> {
                         new TextStyle(color: Colors.orange, letterSpacing: 1.5),
                   ),
                 ),
-                new Text(_todos[index].getDateMd(_todos[index].startAt)),
+                new Text(_todos[index].startAt.toString()),
                 new Padding(
                   padding: const EdgeInsets.only(right: 6.0, left: 10.0),
                   child: new Text(
@@ -114,7 +119,7 @@ class _TodoListState extends State<TodoList> {
                     style: new TextStyle(color: Colors.orange),
                   ),
                 ),
-                new Text(_todos[index].getDateMd(_todos[index].endAt))
+                new Text(_todos[index].getEndDateMd())
               ],
             ),
             onLongPress: () {
@@ -262,4 +267,5 @@ class _TodoListState extends State<TodoList> {
       },
     );
   }
+
 }

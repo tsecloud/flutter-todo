@@ -1,4 +1,4 @@
-#Mon Jun 11 22:39:51 CST 2018
+#Tue Jun 12 01:04:22 CST 2018
 base.0=/home/gru/flutterWorkspace/todo/build/app/intermediates/transforms/dexMerger/debug/0
 path.0=classes.dex
 renamed.0=classes.dex
