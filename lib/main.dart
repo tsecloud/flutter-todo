@@ -6,6 +6,6 @@ void main() => runApp(new MaterialApp(
       theme: new ThemeData(
           primaryColor: Colors.orange,
           brightness: Brightness.light,
-          accentColor: Colors.cyan[600]),
+          accentColor: Colors.orangeAccent),
       home: new TodoList(),
     ));

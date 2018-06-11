@@ -48,17 +48,15 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     GlobalKey<ScaffoldState> _listScaffoldKey = GlobalKey<ScaffoldState>();
 
-    void showMessage(String message, [MaterialColor color = Colors.red]) {
-      _listScaffoldKey.currentState.showSnackBar(new SnackBar(
-        backgroundColor: color,
-        content: new Text(message),
-      ));
-    }
-
     return new Scaffold(
       key: _listScaffoldKey,
       appBar: new AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.menu),
+          onPressed: null,
+        ),
         title: new Text('Todo'),
+        elevation: 0.8,
       ),
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.add),
@@ -81,7 +79,7 @@ class _TodoListState extends State<TodoList> {
 
   Widget getTodoShow(BuildContext context, int index) {
     return new Padding(
-      padding: const EdgeInsets.all(0.0),
+      padding: const EdgeInsets.only(bottom: 0.0),
       child: new Column(
         children: <Widget>[
           new ListTile(
@@ -95,7 +93,8 @@ class _TodoListState extends State<TodoList> {
                   padding: const EdgeInsets.only(right: 6.0),
                   child: new Text(
                     'From:',
-                    style: new TextStyle(color: Colors.orange),
+                    style:
+                        new TextStyle(color: Colors.orange, letterSpacing: 1.5),
                   ),
                 ),
                 new Text(_todos[index].getDateMd(_todos[index].startAt)),
@@ -116,10 +115,10 @@ class _TodoListState extends State<TodoList> {
               _updateTodo(context, _todos[index], index);
             },
           ),
-          // new LinearProgressIndicator(
-          //   backgroundColor: Colors.red,
-          //   value: _todos[index].computeLeftTime(),
-          // ),
+          new Divider(
+            color: Colors.black12,
+            height: 10.0,
+          )
         ],
       ),
     );
@@ -173,8 +172,8 @@ class _TodoListState extends State<TodoList> {
 
     //结束未完成
     return new Icon(
-      Icons.pause,
-      color: Colors.red,
+      Icons.clear,
+      color: Colors.black26,
       size: _size,
     );
   }
