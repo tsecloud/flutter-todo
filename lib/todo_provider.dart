@@ -21,9 +21,9 @@ class TodoProvider {
           
           remark text  null,
 
-          start_at INTEGER not null,
+          start_at text not null,
 
-          end_at integer not null,
+          end_at text not null,
 
           done integer not null default 0
         )

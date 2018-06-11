@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 
 class Todo {
   Todo();
@@ -17,8 +16,8 @@ class Todo {
     Map<String, dynamic> map = {
       "name": name,
       "remark": remark,
-      "start_at": startAt.millisecondsSinceEpoch,
-      "end_at": endAt.millisecondsSinceEpoch,
+      "start_at": startAt.toString(),
+      "end_at": endAt.toString(),
       "done": done ? 1 : 0
     };
 
@@ -31,8 +30,8 @@ class Todo {
   Todo.fromMap(Map<String, dynamic> map) {
     name = map['name'];
     remark = map['remark'];
-    startAt = new DateTime.fromMicrosecondsSinceEpoch(map['start_at']);
-    endAt = new DateTime.fromMicrosecondsSinceEpoch(map['end_at']);
+    startAt = DateTime.parse(map['start_at']);
+    endAt =   DateTime.parse(map['end_at']);
     done = map['done'] == 1 ? true : false;
   }
 
@@ -57,7 +56,7 @@ class Todo {
   }
 
   String getDateMd(DateTime datetime) {
-    String date = new DateFormat.Md().format(datetime);
+    String date = new DateFormat.yMd().format(datetime);
     String time = new DateFormat.Hm().format(datetime);
 
     return date + " " + time;
