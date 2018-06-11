@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 
 import 'todo.dart';
 
-
 String tableName = "todos";
 
 class TodoProvider {
@@ -48,7 +47,7 @@ class TodoProvider {
   }
 
   Future<List<Todo>> getTodos() async {
-    List<Map> maps = await db.query(tableName, orderBy: "created_at",limit: 20);
+    List<Map> maps = await db.query(tableName, orderBy: "start_at", limit: 20);
 
     List<Todo> list = [];
 
@@ -60,9 +59,9 @@ class TodoProvider {
     return list;
   }
 
-  Future<int>updateTodo(Todo todo) async {
-    return await db.update(tableName, todo.toMap(),
-        where: "id = ?", whereArgs: [todo.id]);
+  Future<int> updateTodo(Todo todo) async {
+    return await db
+        .update(tableName, todo.toMap(), where: "id = ?", whereArgs: [todo.id]);
   }
 
   Future<int> deleteTodo(int id) async {
