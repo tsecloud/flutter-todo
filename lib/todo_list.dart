@@ -8,6 +8,7 @@ import 'add_form.dart';
 import 'todo_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'edit_todo.dart';
+import 'todo_drawer.dart';
 
 class TodoList extends StatefulWidget {
   @override
@@ -45,16 +46,23 @@ class _TodoListState extends State<TodoList> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    todoProvider.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     GlobalKey<ScaffoldState> _listScaffoldKey = GlobalKey<ScaffoldState>();
 
     return new Scaffold(
       key: _listScaffoldKey,
       appBar: new AppBar(
-        leading: new IconButton(
-          icon: new Icon(Icons.menu),
-          onPressed: null,
-        ),
+        // leading: new IconButton(
+        //   icon: new Icon(Icons.menu),
+        //   onPressed: null,
+        // ),
         title: new Text('Todo'),
         elevation: 0.8,
       ),
@@ -62,6 +70,7 @@ class _TodoListState extends State<TodoList> {
         child: new Icon(Icons.add),
         onPressed: () => _addTodo(context),
       ),
+      drawer: new DrawerPage(),
       body: new Builder(
         builder: (BuildContext context) {
           return new Container(

@@ -12,14 +12,12 @@ class Todo {
   bool done;
 
   Map<String, dynamic> toMap() {
-
-    if(done == null || done  == false)
-        done = false;
+    if (done == null || done == false) done = false;
 
     Map<String, dynamic> map = {
       "name": name,
-      "remark":remark,
-      "start_at":startAt.millisecondsSinceEpoch,
+      "remark": remark,
+      "start_at": startAt.millisecondsSinceEpoch,
       "end_at": endAt.millisecondsSinceEpoch,
       "done": done ? 1 : 0
     };
@@ -29,8 +27,8 @@ class Todo {
     }
     return map;
   }
-  
-  Todo.fromMap(Map<String, dynamic> map){
+
+  Todo.fromMap(Map<String, dynamic> map) {
     name = map['name'];
     remark = map['remark'];
     startAt = new DateTime.fromMicrosecondsSinceEpoch(map['start_at']);
@@ -39,16 +37,15 @@ class Todo {
   }
 
   // 计算剩余时间的百分比
-  double computeLeftTime(){
-
-    if(this.done == true){
+  double computeLeftTime() {
+    if (this.done == true) {
       return 1.0;
     }
 
     DateTime now = new DateTime.now();
 
     //判断是否开始
-    if(now.compareTo(this.startAt) < 0){
+    if (now.compareTo(this.startAt) < 0) {
       return 0.0;
     }
 
@@ -59,11 +56,10 @@ class Todo {
     return left;
   }
 
-  String getDateMd(DateTime datetime){
+  String getDateMd(DateTime datetime) {
     String date = new DateFormat.Md().format(datetime);
     String time = new DateFormat.Hm().format(datetime);
 
-    return date +" "+ time;
+    return date + " " + time;
   }
-
 }
