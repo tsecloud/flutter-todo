@@ -1,7 +1,6 @@
 import 'package:intl/intl.dart';
 
-enum SearchStatus {all, wait, doing, done, pause }
-
+enum SearchStatus { all, wait, doing, done, pause }
 
 class Todo {
   Todo();
@@ -34,8 +33,8 @@ class Todo {
     id = map['id'];
     name = map['name'];
     remark = map['remark'];
-    startAt = new DateTime.fromMicrosecondsSinceEpoch(map['start_at'], isUtc: true);
-    endAt =  new DateTime.fromMicrosecondsSinceEpoch(map['end_at'], isUtc: true);
+    startAt = new DateTime.fromMillisecondsSinceEpoch(map['start_at']);
+    endAt = new DateTime.fromMillisecondsSinceEpoch(map['end_at']);
     done = map['done'] == 1 ? true : false;
   }
 
@@ -59,14 +58,9 @@ class Todo {
     return left;
   }
 
-  String getSatrtDateMd() {
-      return DateFormat.yMMMd().format(this.startAt).toString();
+  String getDateMd(DateTime dateTime) {
+    String date = DateFormat.yMd().format(dateTime.toLocal()).toString();
+    String time = DateFormat.Hm().format(dateTime.toLocal()).toString();
+    return date + ' ' + time;
   }
-
-  String getEndDateMd() {
-    print(this.endAt);
-      return DateFormat.yMMMd().format(this.endAt).toString();
-  }
-
-
 }
